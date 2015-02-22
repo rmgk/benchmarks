@@ -4,21 +4,20 @@ import java.util.concurrent.TimeUnit
 
 import org.openjdk.jmh.annotations._
 
-import scala.Predef.ArrowAssoc
 import scala.Predef.int2Integer
 import scala.annotation.tailrec
+import scala.collection.JavaConverters.asScalaBufferConverter
 import scala.collection.immutable.{HashMap, HashSet, IndexedSeq, LinearSeq, List, Map, Queue, Set, Stream, TreeMap, TreeSet, Vector}
 import scala.collection.mutable
 import scalaz.IList
-import scala.collection.JavaConverters.asScalaBufferConverter
 
 
 @State(Scope.Thread)
 @BenchmarkMode(Array(Mode.Throughput))
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @Warmup(iterations = 5, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
-@Measurement(iterations = 5, time = 100, timeUnit = TimeUnit.MILLISECONDS)
-@Fork(1)
+@Measurement(iterations = 5, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
+@Fork(3)
 class CollectionCreation {
 
 	@Param(Array(/*"1", "10", "100", "1000",*/ "10000"))
@@ -33,7 +32,7 @@ class CollectionCreation {
 
 	@tailrec
 	final def makeImmutableMap(n: Int, acc: Map[Int, Int]): Map[Int, Int] =
-		if (n > 0) makeImmutableMap(n - 1, acc.+(n, n)) else acc
+		if (n > 0) makeImmutableMap(n - 1, acc.+((n, n))) else acc
 
 	@tailrec
 	final def makeImmutableIndexedSeq(n: Int, acc: IndexedSeq[Int]): IndexedSeq[Int] =
@@ -87,7 +86,7 @@ class CollectionCreation {
 
 	@tailrec
 	final def makeJavaCollection(n: Int, acc: java.util.Collection[Int]): java.util.Collection[Int] =
-		if (n > 0) { acc.add(n) ; makeJavaCollection(n - 1, acc) }
+		if (n > 0) { acc.add(n); makeJavaCollection(n - 1, acc) }
 		else acc
 
 
