@@ -5,17 +5,19 @@ import java.util.concurrent.TimeUnit
 import org.openjdk.jmh.annotations._
 
 import scala.Predef.ArrowAssoc
+import scala.Predef.int2Integer
 import scala.annotation.tailrec
 import scala.collection.immutable.{HashMap, HashSet, IndexedSeq, LinearSeq, List, Map, Queue, Set, Stream, TreeMap, TreeSet, Vector}
 import scala.collection.mutable
 import scalaz.IList
+import scala.collection.JavaConverters.asScalaBufferConverter
 
 
 @State(Scope.Thread)
 @BenchmarkMode(Array(Mode.Throughput))
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
-@Warmup(iterations = 4, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
-@Measurement(iterations = 5, time = 300, timeUnit = TimeUnit.MILLISECONDS)
+@Warmup(iterations = 5, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
+@Measurement(iterations = 5, time = 100, timeUnit = TimeUnit.MILLISECONDS)
 @Fork(1)
 class CollectionCreation {
 
@@ -31,7 +33,7 @@ class CollectionCreation {
 
 	@tailrec
 	final def makeImmutableMap(n: Int, acc: Map[Int, Int]): Map[Int, Int] =
-		if (n > 0) makeImmutableMap(n - 1, acc.+(n -> n)) else acc
+		if (n > 0) makeImmutableMap(n - 1, acc.+(n, n)) else acc
 
 	@tailrec
 	final def makeImmutableIndexedSeq(n: Int, acc: IndexedSeq[Int]): IndexedSeq[Int] =
@@ -52,13 +54,13 @@ class CollectionCreation {
 	//mutable
 
 	@tailrec
-	final def makeMutableArray(n: Int, acc: Array[Int]): Array[Int] =
+	final def makeMutableArray(n: Int, acc: Array[Integer]): Array[Integer] =
 		if (n > 0) { acc(acc.length - n) = n; makeMutableArray(n - 1, acc) }
 		else acc
 
 	@tailrec
 	final def makeMutableMap(n: Int, acc: mutable.Map[Int, Int]): mutable.Map[Int, Int] =
-		if (n > 0) { acc.+=(n -> n); makeMutableMap(n - 1, acc) }
+		if (n > 0) { acc.+=((n, n)); makeMutableMap(n - 1, acc) }
 		else acc
 
 	@tailrec
@@ -74,6 +76,11 @@ class CollectionCreation {
 	@tailrec
 	final def makeMutableLinearSeq(n: Int, acc: mutable.LinearSeq[Int]): mutable.LinearSeq[Int] =
 		if (n > 0) { n +: acc; makeMutableLinearSeq(n - 1, acc) }
+		else acc
+
+	@tailrec
+	final def makeMutableBuffer(n: Int, acc: mutable.Buffer[Int]): mutable.Buffer[Int] =
+		if (n > 0) { n +: acc; makeMutableBuffer(n - 1, acc) }
 		else acc
 
 	//java
@@ -127,11 +134,14 @@ class CollectionCreation {
 	@Benchmark
 	def immutableScalazIList() = makeImmutableScalazIList(size, IList[Int]())
 
+	@Benchmark
+	def immutableListFill() = List.fill(size)(0)
+
 
 	//mutable
 
 	@Benchmark
-	def mutableArray() = makeMutableArray(size, new Array[Int](size))
+	def mutableArray() = makeMutableArray(size, new Array[Integer](size))
 
 	@Benchmark
 	def mutableMapHash() = makeMutableMap(size, mutable.HashMap[Int, Int]())
@@ -183,4 +193,8 @@ class CollectionCreation {
 	def javaLinkedList() = makeJavaCollection(size, new java.util.LinkedList[Int]())
 	@Benchmark
 	def javaHashSet() = makeJavaCollection(size, new java.util.HashSet[Int]())
+	@Benchmark
+	def javaAsScalaArrayList() = makeMutableBuffer(size, new java.util.ArrayList[Int]().asScala)
+	@Benchmark
+	def javaAsScalaArrayListSizeHint() = makeMutableBuffer(size, new java.util.ArrayList[Int](size).asScala)
 }
