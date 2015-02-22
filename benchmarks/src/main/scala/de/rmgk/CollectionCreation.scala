@@ -134,7 +134,10 @@ class CollectionCreation {
 	def immutableScalazIList() = makeImmutableScalazIList(size, IList[Int]())
 
 	@Benchmark
-	def immutableListFill() = List.fill(size)(0)
+	def immutableListFill() = {
+		var i = 0
+		List.fill(size){i += 1; i}
+	}
 
 
 	//mutable
