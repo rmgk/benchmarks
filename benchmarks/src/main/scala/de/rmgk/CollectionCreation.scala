@@ -74,7 +74,7 @@ class CollectionCreation {
 	@tailrec
 	final def makeMutableLinearSeq(n: Int, acc: mutable.LinearSeq[Int]): mutable.LinearSeq[Int] =
 		if (n > 0) { n +: acc; makeMutableLinearSeq(n - 1, acc) }
-		else acc.reverse
+		else acc
 
 	//java
 
