@@ -1,12 +1,14 @@
 
 lazy val benchmarks = project.in(file("benchmarks"))
-  .settings(
-    name := "scratch",
-    version := "0.0.0",
-    scalaVersion := "2.11.2")
+  .settings(name := "scratch")
   .settings(jmhSettings: _*)
 
+lazy val root = project.in(file("."))
+	.settings(name := "root")
 
+version in Global := "0.0.0"
+
+scalaVersion in Global := "2.11.5"
 
 libraryDependencies in Global += "org.scalaz" %% "scalaz-core" % "7.1.1"
 
