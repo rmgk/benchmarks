@@ -13,9 +13,9 @@ import scalaz.IList
 
 @State(Scope.Thread)
 @BenchmarkMode(Array(Mode.Throughput))
-@OutputTimeUnit(TimeUnit.MICROSECONDS)
-@Warmup(iterations = 3, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
-@Measurement(iterations = 5, time = 100, timeUnit = TimeUnit.MILLISECONDS)
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
+@Warmup(iterations = 4, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
+@Measurement(iterations = 5, time = 300, timeUnit = TimeUnit.MILLISECONDS)
 @Fork(1)
 class CollectionCreation {
 
@@ -75,6 +75,13 @@ class CollectionCreation {
 	final def makeMutableLinearSeq(n: Int, acc: mutable.LinearSeq[Int]): mutable.LinearSeq[Int] =
 		if (n > 0) { n +: acc; makeMutableLinearSeq(n - 1, acc) }
 		else acc.reverse
+
+	//java
+
+	@tailrec
+	final def makeJavaCollection(n: Int, acc: java.util.Collection[Int]): java.util.Collection[Int] =
+		if (n > 0) { acc.add(n) ; makeJavaCollection(n - 1, acc) }
+		else acc
 
 
 	// ********************************************
@@ -162,4 +169,18 @@ class CollectionCreation {
 	@Benchmark
 	def mutableSeqArrayStack() = makeMutableSeq(size, mutable.ArrayStack[Int]())
 
+	// java
+
+	@Benchmark
+	def javaArrayList() = makeJavaCollection(size, new java.util.ArrayList[Int]())
+	@Benchmark
+	def javaArrayListSizeHint() = makeJavaCollection(size, new java.util.ArrayList[Int](size))
+	@Benchmark
+	def javaVector() = makeJavaCollection(size, new java.util.Vector[Int]())
+	@Benchmark
+	def javaVectorSizeHint() = makeJavaCollection(size, new java.util.Vector[Int](size))
+	@Benchmark
+	def javaLinkedList() = makeJavaCollection(size, new java.util.LinkedList[Int]())
+	@Benchmark
+	def javaHashSet() = makeJavaCollection(size, new java.util.HashSet[Int]())
 }
