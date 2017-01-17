@@ -8,7 +8,7 @@ lazy val root = project.in(file("."))
 
 version in Global := "0.0.0"
 
-scalaVersion in Global := "2.11.6"
+scalaVersion in Global := "2.11.8"
 
 libraryDependencies in Global += "org.scalaz" %% "scalaz-core" % "7.1.1"
 
