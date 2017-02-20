@@ -7,11 +7,11 @@ import org.openjdk.jmh.infra.Blackhole
 
 @State(Scope.Group)
 @BenchmarkMode(Array(Mode.Throughput))
-@OutputTimeUnit(TimeUnit.MICROSECONDS)
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
 @Warmup(iterations = 3, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
 @Measurement(iterations = 3, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
 @Fork(3)
-@Threads(16)
+@Threads(4)
 class ConcurrentMapRead {
 
 	var concurrentMap: java.util.concurrent.ConcurrentMap[String, String] = _
