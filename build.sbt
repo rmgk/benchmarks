@@ -1,16 +1,12 @@
+enablePlugins(JmhPlugin)
 
-lazy val benchmarks = project.in(file("benchmarks"))
-  .settings(name := "scratch")
-  .settings(jmhSettings: _*)
+version:= "0.0.0"
 
-lazy val root = project.in(file("."))
-	.settings(name := "root")
+scalaVersion := "2.12.1"
 
-version in Global := "0.0.0"
+name := "random-benchmarks"
 
-scalaVersion in Global := "2.11.8"
-
-libraryDependencies in Global += "org.scalaz" %% "scalaz-core" % "7.1.1"
+libraryDependencies += "org.scalaz" %% "scalaz-core" % "7.2.8"
 
 
 scalacOptions in Global ++= (
@@ -18,20 +14,19 @@ scalacOptions in Global ++= (
   "-encoding" :: "UTF-8" ::
   "-unchecked" ::
   "-feature" ::
-  "-target:jvm-1.7" ::
+  "-target:jvm-1.8" ::
   "-Xlint" ::
   "-Xfuture" ::
   //"-Xlog-implicits" ::
   //"-Yno-predef" ::
   //"-Yno-imports" ::
-  //"-Xfatal-warnings" ::
-  "-Yinline-warnings" ::
+  "-Xfatal-warnings" ::
   "-Yno-adapted-args" ::
   "-Ywarn-dead-code" ::
   "-Ywarn-nullary-override" ::
   "-Ywarn-nullary-unit" ::
-  //"-Ywarn-numeric-widen" ::
-  //"-Ywarn-value-discard" ::
+  "-Ywarn-numeric-widen" ::
+  "-Ywarn-value-discard" ::
   Nil)
 
 javaOptions in Global ++= (

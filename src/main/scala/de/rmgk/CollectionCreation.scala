@@ -15,9 +15,9 @@ import scalaz.IList
 @State(Scope.Thread)
 @BenchmarkMode(Array(Mode.Throughput))
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
-@Warmup(iterations = 4, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
-@Measurement(iterations = 5, time = 300, timeUnit = TimeUnit.MILLISECONDS)
-@Fork(2)
+@Warmup(iterations = 3, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
+@Measurement(iterations = 3, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
+@Fork(3)
 class CollectionCreation {
 
 	@Param(Array(/*"1", "10", "100", "1000",*/ "10000"))

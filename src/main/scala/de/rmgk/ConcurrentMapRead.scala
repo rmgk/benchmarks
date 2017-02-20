@@ -9,8 +9,8 @@ import org.openjdk.jmh.infra.Blackhole
 @BenchmarkMode(Array(Mode.Throughput))
 @OutputTimeUnit(TimeUnit.MICROSECONDS)
 @Warmup(iterations = 3, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
-@Measurement(iterations = 5, time = 100, timeUnit = TimeUnit.MILLISECONDS)
-@Fork(1)
+@Measurement(iterations = 3, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
+@Fork(3)
 @Threads(16)
 class ConcurrentMapRead {
 
