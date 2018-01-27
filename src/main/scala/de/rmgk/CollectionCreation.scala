@@ -67,13 +67,18 @@ class CollectionCreation {
 		else acc
 
 	@tailrec
+	final def makeMutableArrayBuffer(n: Int, acc: mutable.ArrayBuffer[Int]): mutable.Seq[Int] =
+		if (n > 0) { acc += n; makeMutableArrayBuffer(n - 1, acc) }
+		else acc
+
+	@tailrec
 	final def makeMutableLinearSeq(n: Int, acc: mutable.LinearSeq[Int]): mutable.LinearSeq[Int] =
 		if (n > 0) { n +: acc; makeMutableLinearSeq(n - 1, acc) }
 		else acc
 
 	@tailrec
 	final def makeMutableBuffer(n: Int, acc: mutable.Buffer[Int]): mutable.Buffer[Int] =
-		if (n > 0) { n +: acc; makeMutableBuffer(n - 1, acc) }
+		if (n > 0) { acc += n; makeMutableBuffer(n - 1, acc) }
 		else acc
 
 	//java
@@ -161,10 +166,10 @@ class CollectionCreation {
 	def mutableSeqArray() = makeMutableSeq(size, mutable.ArraySeq[Int]())
 
 	@Benchmark
-	def mutableSeqArrayBuffer() = makeMutableSeq(size, mutable.ArrayBuffer[Int]())
+	def mutableSeqArrayBuffer() = makeMutableBuffer(size, mutable.ArrayBuffer[Int]())
 
 	@Benchmark
-	def mutableSeqListBuffer() = makeMutableSeq(size, mutable.ListBuffer[Int]())
+	def mutableSeqListBuffer() = makeMutableBuffer(size, mutable.ListBuffer[Int]())
 
 	@Benchmark
 	def mutableSeqStack() = makeMutableSeq(size, mutable.Stack[Int]())
