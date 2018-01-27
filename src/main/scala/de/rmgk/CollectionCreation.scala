@@ -4,12 +4,10 @@ import java.util.concurrent.TimeUnit
 
 import org.openjdk.jmh.annotations._
 
-import scala.Predef.int2Integer
 import scala.annotation.tailrec
 import scala.collection.JavaConverters.asScalaBufferConverter
 import scala.collection.immutable.{HashMap, HashSet, IndexedSeq, LinearSeq, List, Map, Queue, Set, Stream, TreeMap, TreeSet, Vector}
 import scala.collection.mutable
-import scalaz.IList
 
 
 @State(Scope.Thread)
@@ -45,10 +43,6 @@ class CollectionCreation {
 	@tailrec
 	final def makeImmutableList(n: Int, acc: List[Int]): List[Int] =
 		if (n > 0) makeImmutableList(n - 1, n :: acc) else acc
-
-	@tailrec
-	final def makeImmutableScalazIList(n: Int, acc: IList[Int]): IList[Int] =
-		if (n > 0) makeImmutableScalazIList(n - 1, n :: acc) else acc
 
 	//mutable
 
@@ -129,9 +123,6 @@ class CollectionCreation {
 
 	@Benchmark
 	def immutableList() = makeImmutableList(size, List())
-
-	@Benchmark
-	def immutableScalazIList() = makeImmutableScalazIList(size, IList[Int]())
 
 	@Benchmark
 	def immutableListFill() = {

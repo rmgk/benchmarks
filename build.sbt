@@ -2,12 +2,9 @@ enablePlugins(JmhPlugin)
 
 version:= "0.0.0"
 
-scalaVersion := "2.12.1"
+scalaVersion := "2.12.4"
 
 name := "random-benchmarks"
-
-libraryDependencies += "org.scalaz" %% "scalaz-core" % "7.2.8"
-
 
 scalacOptions in Global ++= (
   "-deprecation" ::
