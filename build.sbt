@@ -2,7 +2,7 @@ enablePlugins(JmhPlugin)
 
 version:= "0.0.0"
 
-scalaVersion := "2.12.4"
+scalaVersion := "2.12.7"
 
 name := "random-benchmarks"
 
