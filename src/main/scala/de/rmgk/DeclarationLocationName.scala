@@ -2,10 +2,11 @@ package de.rmgk
 
 import java.util.concurrent.TimeUnit
 
-import org.openjdk.jmh.annotations.{Benchmark, BenchmarkMode, Fork, Measurement, Mode, OutputTimeUnit, Scope, State, Warmup}
+import org.openjdk.jmh.annotations.{
+  Benchmark, BenchmarkMode, Fork, Measurement, Mode, OutputTimeUnit, Scope, State, Warmup
+}
 
 import scala.util.DynamicVariable
-
 
 @State(Scope.Thread)
 @BenchmarkMode(Array(Mode.Throughput))
@@ -19,9 +20,11 @@ class DeclarationLocationName {
     if (dynamicNameVar.value.nonEmpty) dynamicNameVar.value
     else {
       val trace = Thread.currentThread().getStackTrace
-      var i = 0
-      while (trace(i).toString.startsWith("scala.") || trace(i).toString.startsWith("java.") ||
-        (trace(i).toString.startsWith("de.rmgk") && !trace(i).toString.startsWith("de.rmgk.test"))) i += 1
+      var i     = 0
+      while (
+        trace(i).toString.startsWith("scala.") || trace(i).toString.startsWith("java.") ||
+        (trace(i).toString.startsWith("de.rmgk") && !trace(i).toString.startsWith("de.rmgk.test"))
+      ) i += 1
 
       s"${trace(i).getFileName}(${trace(i).getLineNumber})"
     }

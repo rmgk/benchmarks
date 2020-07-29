@@ -8,7 +8,6 @@ import org.openjdk.jmh.infra.Blackhole
 
 import scala.collection.mutable.ArrayBuffer
 
-
 @State(Scope.Thread)
 @BenchmarkMode(Array(Mode.Throughput))
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
@@ -17,11 +16,11 @@ import scala.collection.mutable.ArrayBuffer
 @Fork(3)
 class Iteration {
 
-  @Param(Array(/*"1", "10", "100", "1000",*/ "100000000"))
+  @Param(Array( /*"1", "10", "100", "1000",*/ "100000000"))
   var size: Int = _
 
-  val list = List.fill(size)(1)
-  val arrayList = new java.util.ArrayList[Int](Collections.nCopies(size, 0))
+  val list        = List.fill(size)(1)
+  val arrayList   = new java.util.ArrayList[Int](Collections.nCopies(size, 0))
   val arrayBuffer = ArrayBuffer.fill(size)(1)
 
   @Benchmark

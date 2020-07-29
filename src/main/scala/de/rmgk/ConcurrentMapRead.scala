@@ -14,50 +14,49 @@ import org.openjdk.jmh.infra.Blackhole
 @Threads(4)
 class ConcurrentMapRead {
 
-	var concurrentMap: java.util.concurrent.ConcurrentMap[String, String] = _
-	var javaMap: java.util.Map[String, String] = _
-	var immutableScalaMap: scala.collection.immutable.Map[String, String] = _
-	var mutableScalaMap: scala.collection.mutable.Map[String, String] = _
+  var concurrentMap: java.util.concurrent.ConcurrentMap[String, String] = _
+  var javaMap: java.util.Map[String, String]                            = _
+  var immutableScalaMap: scala.collection.immutable.Map[String, String] = _
+  var mutableScalaMap: scala.collection.mutable.Map[String, String]     = _
 
-	def values = List("one", "tow", "three", "four", "five", "six", "seven")
+  def values = List("one", "tow", "three", "four", "five", "six", "seven")
 
-	@Setup(Level.Iteration)
-	def setup() = {
-		concurrentMap = new java.util.concurrent.ConcurrentHashMap[String, String]()
-		javaMap = new java.util.HashMap[String, String]()
-		immutableScalaMap = scala.collection.immutable.TreeMap[String, String](values.zip(values): _*)
-		mutableScalaMap = scala.collection.mutable.HashMap[String, String](values.zip(values): _*)
-		values.foreach { v =>
-			concurrentMap.put(v, v)
-			javaMap.put(v, v)
-			//scalaMap.+=(Tuple2(v, v))
-		}
+  @Setup(Level.Iteration)
+  def setup() = {
+    concurrentMap = new java.util.concurrent.ConcurrentHashMap[String, String]()
+    javaMap = new java.util.HashMap[String, String]()
+    immutableScalaMap = scala.collection.immutable.TreeMap[String, String](values.zip(values): _*)
+    mutableScalaMap = scala.collection.mutable.HashMap[String, String](values.zip(values): _*)
+    values.foreach { v =>
+      concurrentMap.put(v, v)
+      javaMap.put(v, v)
+    //scalaMap.+=(Tuple2(v, v))
+    }
 
-	}
+  }
 
-	@Benchmark
-	@Group("concurrentMap")
-	def readConcurrent(bh: Blackhole) = {
-		bh.consume(concurrentMap.get("six"))
-	}
+  @Benchmark
+  @Group("concurrentMap")
+  def readConcurrent(bh: Blackhole) = {
+    bh.consume(concurrentMap.get("six"))
+  }
 
-	@Benchmark
-	@Group("javaMap")
-	def readNormal(bh: Blackhole) = {
-		bh.consume(javaMap.get("six"))
-	}
+  @Benchmark
+  @Group("javaMap")
+  def readNormal(bh: Blackhole) = {
+    bh.consume(javaMap.get("six"))
+  }
 
-	@Benchmark
-	@Group("scalaMapImmutable")
-	def readScalaImmutable(bh: Blackhole) = {
-		bh.consume(immutableScalaMap.apply("six"))
-	}
+  @Benchmark
+  @Group("scalaMapImmutable")
+  def readScalaImmutable(bh: Blackhole) = {
+    bh.consume(immutableScalaMap.apply("six"))
+  }
 
-	@Benchmark
-	@Group("scalaMapMutable")
-	def readScalaMutable(bh: Blackhole) = {
-		bh.consume(mutableScalaMap.apply("six"))
-	}
-
+  @Benchmark
+  @Group("scalaMapMutable")
+  def readScalaMutable(bh: Blackhole) = {
+    bh.consume(mutableScalaMap.apply("six"))
+  }
 
 }

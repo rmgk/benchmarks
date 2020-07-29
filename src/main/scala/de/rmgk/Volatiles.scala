@@ -3,7 +3,9 @@ package de.rmgk
 import java.util.concurrent.atomic.AtomicReference
 import java.util.concurrent.{ThreadLocalRandom, TimeUnit}
 
-import org.openjdk.jmh.annotations.{Benchmark, BenchmarkMode, Fork, Group, GroupThreads, Measurement, Mode, OutputTimeUnit, Scope, Setup, State, Warmup}
+import org.openjdk.jmh.annotations.{
+  Benchmark, BenchmarkMode, Fork, Group, GroupThreads, Measurement, Mode, OutputTimeUnit, Scope, Setup, State, Warmup
+}
 import org.openjdk.jmh.infra.{BenchmarkParams, ThreadParams}
 
 @State(Scope.Benchmark)
@@ -24,7 +26,7 @@ class Volatiles() {
   @Benchmark
   @Group("volatile")
   @GroupThreads(3)
-  def read( params: ThreadParams) = {
+  def read(params: ThreadParams) = {
     field(params.getThreadIndex).get()
   }
 
@@ -63,10 +65,8 @@ class Volatiles() {
 
 }
 
-
-
 @State(Scope.Thread)
 class Counter {
   private var x = ThreadLocalRandom.current().nextInt()
-  @inline final def step() = {x += 1; x}
+  @inline final def step() = { x += 1; x }
 }

@@ -2,7 +2,9 @@ package de.rmgk
 
 import java.util.concurrent.TimeUnit
 
-import org.openjdk.jmh.annotations.{Benchmark, BenchmarkMode, Fork, Measurement, Mode, OutputTimeUnit, Scope, State, Warmup}
+import org.openjdk.jmh.annotations.{
+  Benchmark, BenchmarkMode, Fork, Measurement, Mode, OutputTimeUnit, Scope, State, Warmup
+}
 import org.openjdk.jmh.infra.Blackhole
 
 @State(Scope.Thread)
@@ -27,7 +29,7 @@ class PartialFunctions {
   @Benchmark
   def useFlatmap(bh: Blackhole) = {
     ab.flatMap { x =>
-      if ( {Blackhole.consumeCPU(work); true}) Some(x)
+      if ({ Blackhole.consumeCPU(work); true }) Some(x)
       else None
     }
   }

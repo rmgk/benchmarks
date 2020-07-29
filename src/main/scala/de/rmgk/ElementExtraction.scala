@@ -2,7 +2,9 @@ package de.rmgk
 
 import java.util.concurrent.TimeUnit
 
-import org.openjdk.jmh.annotations.{Benchmark, BenchmarkMode, Fork, Measurement, Mode, OutputTimeUnit, Scope, State, Warmup}
+import org.openjdk.jmh.annotations.{
+  Benchmark, BenchmarkMode, Fork, Measurement, Mode, OutputTimeUnit, Scope, State, Warmup
+}
 import org.openjdk.jmh.infra.Blackhole
 
 @State(Scope.Thread)
@@ -14,8 +16,7 @@ import org.openjdk.jmh.infra.Blackhole
 class ElementExtraction {
 
   var someInt: Option[Int] = Some(1)
-  var j: Int = 10
-
+  var j: Int               = 10
 
   @Benchmark
   def foreach(bh: Blackhole) = {
@@ -35,8 +36,9 @@ class ElementExtraction {
   }
 
   @Benchmark
-  def pattern(bh: Blackhole) = someInt match {
-    case Some(i) => bh.consume(i + j)
-    case None => ()
-  }
+  def pattern(bh: Blackhole) =
+    someInt match {
+      case Some(i) => bh.consume(i + j)
+      case None    => ()
+    }
 }
