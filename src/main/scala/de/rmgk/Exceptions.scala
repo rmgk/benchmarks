@@ -2,10 +2,13 @@ package de.rmgk
 
 import java.util.concurrent.TimeUnit
 
-import org.openjdk.jmh.annotations.{Benchmark, BenchmarkMode, Fork, Measurement, Mode, OutputTimeUnit, Scope, State, Warmup}
+import org.openjdk.jmh.annotations.{
+  Benchmark, BenchmarkMode, Fork, Measurement, Mode, OutputTimeUnit, Scope, State, Warmup
+}
 
 import scala.util.{Failure, Try}
-import scala.util.control.ControlThrowable
+
+class MyControlThrowable() extends Throwable("", null, false, false)
 
 @State(Scope.Thread)
 @BenchmarkMode(Array(Mode.Throughput))
@@ -18,8 +21,6 @@ class Exceptions {
   def newThrowable(): Throwable = {
     new Throwable()
   }
-
-  class MyControlThrowable() extends ControlThrowable
 
   @Benchmark
   def newControlThrowable(): Throwable = {
@@ -37,7 +38,8 @@ class Exceptions {
   def catchingExceptions(): Throwable = {
     def fails() = throw new MyControlThrowable()
 
-    try fails() catch {case e: MyControlThrowable => e}
+    try fails()
+    catch { case e: MyControlThrowable => e }
   }
 
   @Benchmark
