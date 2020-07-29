@@ -72,7 +72,7 @@ class CollectionCreation {
 		else acc
 
 	@tailrec
-	final def makeMutableLinearSeq(n: Int, acc: mutable.LinearSeq[Int]): mutable.LinearSeq[Int] =
+	final def makeMutableLinearSeq(n: Int, acc: mutable.Seq[Int]): mutable.Seq[Int] =
 		if (n > 0) { n +: acc; makeMutableLinearSeq(n - 1, acc) }
 		else acc
 
@@ -158,9 +158,6 @@ class CollectionCreation {
 
 	@Benchmark
 	def mutableSetLinkedHash() = makeMutableSet(size, mutable.LinkedHashSet[Int]())
-
-	@Benchmark
-	def mutableLinearSeqMutableList() = makeMutableLinearSeq(size, mutable.MutableList[Int]())
 
 	@Benchmark
 	def mutableSeqArray() = makeMutableSeq(size, mutable.ArraySeq[Int]())
